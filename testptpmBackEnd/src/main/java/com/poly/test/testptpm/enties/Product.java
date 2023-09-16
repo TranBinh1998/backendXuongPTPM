@@ -32,13 +32,10 @@ public class Product {
     @JoinColumn(name = "name_category_id")
     private SubCategory subCategory;
 
-    @Column(name = "product_name", length = 100)
-    @Size(min = 2,max = 100, message = "Tên phải có độ dài từ 2 đến 100 ký tự")
-    @NotBlank(message = "Tên sản phẩm không được để trống")
+
     private String productName;
 
-    @Size(min = 2,max = 49, message = "Màu sắc phải có độ dài từ 2 đến 50 ký tự")
-    @NotBlank(message = "Màu sắc không được để trống")
+
     @Column(name = "color", length = 50)
     private String color;
 

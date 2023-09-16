@@ -1,4 +1,4 @@
-package com.poly.test.testptpm.rest;
+package com.poly.test.testptpm.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

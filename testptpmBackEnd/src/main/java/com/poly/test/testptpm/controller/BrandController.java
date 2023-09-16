@@ -1,8 +1,8 @@
-package com.poly.test.testptpm.rest;
+package com.poly.test.testptpm.controller;
 
 import com.poly.test.testptpm.enties.Brand;
-import com.poly.test.testptpm.enties.Status;
-import com.poly.test.testptpm.service.StatusService;
+import com.poly.test.testptpm.service.BrandsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,22 +11,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/v1/status")
-public class StatusController {
+@RequestMapping("/api/v1/brand")
+public class BrandController {
 
-    StatusService statusService;
-
-    public StatusController(StatusService statusService) {
-        this.statusService = statusService;
-    }
+    @Autowired
+   private BrandsService brandsService;
 
     @GetMapping
     public ResponseEntity<?> getAllBrands () {
-        List<Status> statusList = statusService.getstatusList();
-        return ResponseEntity.ok(statusList);
+        List<Brand> brandList = brandsService.getlistBrands();
+        System.out.println("Gọi request");
+        return ResponseEntity.ok(brandList);
     }
-
 
 }

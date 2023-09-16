@@ -1,6 +1,6 @@
 package com.poly.test.testptpm.service.impl;
 
-import com.poly.test.testptpm.dao.SubCategoryRepository;
+import com.poly.test.testptpm.repository.SubCategoryRepository;
 import com.poly.test.testptpm.enties.SubCategory;
 import com.poly.test.testptpm.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class SubCategoryServiceImpl implements SubCategoryService {
 
-    SubCategoryRepository subCategoryRepository;
+    private SubCategoryRepository subCategoryRepository;
 
     @Autowired
     public SubCategoryServiceImpl(SubCategoryRepository subCategoryRepository) {

@@ -1,13 +1,11 @@
-package com.poly.test.testptpm.dto;
+package com.poly.test.testptpm.response;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ProductDTO {
+public class ProductResponse {
 
     private Long id;
 

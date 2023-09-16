@@ -1,5 +1,5 @@
 import React, {Component, useEffect, useState} from 'react';
-import './Fiter.scss';
+import '../css/Fiter.scss';
 
 import {getAllStatus} from "../service/StatusService";
 

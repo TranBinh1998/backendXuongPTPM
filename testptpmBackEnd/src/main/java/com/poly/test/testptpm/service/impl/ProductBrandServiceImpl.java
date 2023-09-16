@@ -1,7 +1,6 @@
 package com.poly.test.testptpm.service.impl;
 
-import com.poly.test.testptpm.dao.ProductBrandRepository;
-import com.poly.test.testptpm.enties.Brand;
+import com.poly.test.testptpm.repository.ProductBrandRepository;
 import com.poly.test.testptpm.enties.Product;
 import com.poly.test.testptpm.enties.ProductBrand;
 import com.poly.test.testptpm.service.ProductBrandService;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class ProductBrandServiceImpl implements ProductBrandService {
 
     @Autowired
-    ProductBrandRepository productBrandRepository;
+    private  ProductBrandRepository productBrandRepository;
 
     @Override
     public void saveProductBrand(ProductBrand productBrand) {

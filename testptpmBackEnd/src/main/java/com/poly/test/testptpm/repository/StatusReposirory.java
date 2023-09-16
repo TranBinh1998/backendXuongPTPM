@@ -1,4 +1,4 @@
-package com.poly.test.testptpm.dao;
+package com.poly.test.testptpm.repository;
 
 import com.poly.test.testptpm.enties.Status;
 import org.springframework.data.jpa.repository.JpaRepository;

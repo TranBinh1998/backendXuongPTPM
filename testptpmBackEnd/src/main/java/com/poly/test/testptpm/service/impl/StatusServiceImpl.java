@@ -1,6 +1,6 @@
 package com.poly.test.testptpm.service.impl;
 
-import com.poly.test.testptpm.dao.StatusReposirory;
+import com.poly.test.testptpm.repository.StatusReposirory;
 import com.poly.test.testptpm.enties.Status;
 import com.poly.test.testptpm.service.StatusService;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.Optional;
 public class StatusServiceImpl implements StatusService {
 
 
-    StatusReposirory statusReposirory;
+    private StatusReposirory statusReposirory;
 
     public StatusServiceImpl(StatusReposirory statusReposirory) {
         this.statusReposirory = statusReposirory;

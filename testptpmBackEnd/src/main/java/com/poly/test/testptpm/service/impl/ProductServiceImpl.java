@@ -1,21 +1,19 @@
 package com.poly.test.testptpm.service.impl;
 
-import com.poly.test.testptpm.dao.ProductRepository;
-import com.poly.test.testptpm.dto.ProductDTO;
+import com.poly.test.testptpm.repository.ProductRepository;
+import com.poly.test.testptpm.response.ProductResponse;
 import com.poly.test.testptpm.enties.Product;
 import com.poly.test.testptpm.request.ProductFilterRequest;
 import com.poly.test.testptpm.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl  implements ProductService {
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     @Override
     public List<Product> getAllProduct() {
@@ -29,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO findProductById(long id) {
+    public ProductResponse findProductById(long id) {
         return productRepository.findByProductId(id).get(0);
     }
 
@@ -49,12 +47,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> searchProducts(String query) {
+    public List<ProductResponse> searchProducts(String query) {
         return productRepository.searchProducts(query);
     }
 
     @Override
-    public List<ProductDTO> getProductsByProductNameProductPriceProdcutBrandAndCategory(ProductFilterRequest productFilterRequest) {
+    public List<ProductResponse> getProductsByProductNameProductPriceProdcutBrandAndCategory(ProductFilterRequest productFilterRequest) {
         boolean isEmptyBrands = false;
         if (productFilterRequest.getIdBrand() == null || productFilterRequest.getIdBrand() == 0) {
             isEmptyBrands = true;
@@ -80,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
             isEmptyProductPrice = true;
         }
 
-        List<ProductDTO> productDTOList = productRepository
+        List<ProductResponse> productDTOList = productRepository
                 .getProductsByProductNameProductPriceProdcutBrandAndCategory(
                         isEmptyBrands, isEmptyCategory,
                         productFilterRequest.getIdBrand(),
@@ -95,7 +93,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public List<ProductDTO> getAllProductDTO() {
+    public List<ProductResponse> getAllProductDTO() {
         return productRepository.getAllProductDTO();
     }
 

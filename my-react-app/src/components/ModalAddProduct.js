@@ -31,6 +31,8 @@ const ModalAddProduct = (props) => {
 
     const {show, handleClose, productEdit, modalState} = props;
 
+    const [errors, setErrors] = useState({})
+
     const [product, setProduct] = useState(null);
 
     const  [showModal, setShowModal] = useState(false);
@@ -47,7 +49,7 @@ const ModalAddProduct = (props) => {
             setIdBrand(product.idBrand);
             setIdStatus(product.idStatus);
             setIdSubCategory(product.idSubCategory);
-
+            setErrors({})
         }
         else {
             setIdProduct(0);
@@ -59,6 +61,7 @@ const ModalAddProduct = (props) => {
             setIdBrand(0);
             setIdStatus(0);
             setIdSubCategory(0);
+            setErrors({})
         }
 
     }
@@ -130,57 +133,71 @@ const ModalAddProduct = (props) => {
 
     const handleSaveUser = async () => {
 
-        if (productReq.productName.trim() == "") {
-            alert("Vui lòng nhập tên sản phẩm");
-            return false;
-        }
+        const validationErrors = {}
 
 
-        if (productReq.productName.length < 3 || productReq.productName > 20) {
-            alert("Tên sản phẩm không được quá ngắn hoặc quá dài 3-20 ký tự");
-            return  false;
+        if (productReq.productName.length < 3 || productReq.productName > 25) {
+            validationErrors.productName = "Tên sản phẩm không được để trống hoặc quá ngắn 3-25 ký tự";
+            setErrors(validationErrors);
         }
-        if ((productReq.sellPrice  < 1000) || (productReq.originPrice  < 1000) ) {
-            alert("Sản phẩm không thể dưới giá 1,000 vnd");
-            return  false;
+        if (productReq.color.trim() == "") {
+            validationErrors.color = "Vui lòng chọn màu. Nếu không màu hoặc không xác định nhập none ";
+            setErrors(validationErrors)
+        }
+        if (productReq.quantity < 1) {
+            validationErrors.quantity = "Vui lòng nhập số lượng";
+            setErrors(validationErrors);
+        }
+
+        if ((productReq.sellPrice  < 1000) ) {
+            validationErrors.sellPrice = "Sản phẩm không thể dưới giá 1,000 vnd";
+            setErrors(validationErrors)
+        }
+        if ( (productReq.originPrice  < 1000) ) {
+            validationErrors.originPrice = "Sản phẩm không thể dưới giá 1,000 vnd";
+            setErrors(validationErrors)
         }
 
         if (productReq.sellPrice < productReq.originPrice) {
-            alert("Gía bán không nên nhỏ hơn giá gốc");
-            return  false;
-        }
-        if (productReq.quantity < 1) {
-            alert("Vui lòng nhập số lượng");
-            return  false;
-        }
-        if (productReq.color.trim() == "") {
-            alert("Vui lòng chọn màu. Nếu không màu hoặc không xác định nhập none ");
-            return false;
+            console.log(productReq.sellPrice);
+            console.log(productReq.originPrice);
+            validationErrors.sellPrice = "Gía bán không nên nhỏ hơn giá nhập !!! ";
+            setErrors(validationErrors)
         }
 
-        if (productReq.description.trim() == "") {
-            alert("Vui lòng nhập chi tiết sản phẩm");
-            return  false;
+
+        if (productReq.description.length < 1) {
+            validationErrors.description = "Vui lòng nhập chi tiết sản phẩm !!! ";
+            setErrors(validationErrors)
+        }
+        if (productReq.idBrand === 0) {
+            validationErrors.idBrand = "Vui lòng chọn SubCategory !!! ";
+            setErrors(validationErrors);
         }
 
         if (productReq.idSubCategory === 0) {
-            alert("Vui lòng chọn SubCategory")
-            return  false;
-        }
-        if (productReq.idBrand === 0) {
-            alert("Vui lòng chọn Brand");
+            validationErrors.idSubCategory = "Vui lòng chọn SubCategory !!! ";
+            setErrors(validationErrors);
         }
 
+
         if (productReq.idStatus === 0 || productReq.idStatus === "") {
-            alert("Vui lòng chọn trạng thái ");
+            validationErrors.idStatus = "Vui lòng chọn trạng thái !!! ";
+            setErrors(validationErrors);
+        }
+
+        const isEmpty = Object.keys(validationErrors).length === 0; // true
+        if (isEmpty == false) {
+            console.log(isEmpty);
+            console.log(validationErrors);
             return false;
         }
 
-
-
-
         try {
-            let res = await addNewProduct(productReq);
+            let res = await addNewProduct(productReq).then(
+
+            )
+
             if (res.status === 201) {
                 toast.success("Thêm sản phẩm thành công");
                 // Sau khi add thành công thì truyền product ra component cha;
@@ -192,9 +209,9 @@ const ModalAddProduct = (props) => {
                 props.addProduct(true);
                 handleClose();
                 setProduct(null);
-
             } else {
-                toast.error(res.statusText);
+                console.log("res bắt được", res);
+                toast.error(res.data.color); // Lấy data từ server gửi ra client
             }
         }catch (res) {
             toast.error("Có lỗi xảy ra");
@@ -218,6 +235,7 @@ const ModalAddProduct = (props) => {
                                     <input type="text" className="form-control" id=""
                                            value={productName} onChange={event => setProductName(event.target.value)}
                                            aria-describedby="emailHelp" readOnly={modalState == "detail" ? true : false} placeholder="Enter Product Name"/>
+                                    {errors.productName && <span>{errors.productName}</span>}
                                 </div>
                                 <div className="form-group">
                                     <label>Color : </label>
@@ -225,6 +243,7 @@ const ModalAddProduct = (props) => {
                                            value={color} onChange={event => setColor(event.target.value)}
                                            readOnly={modalState == "detail" ? true : false}
                                            placeholder="Enter Color"/>
+                                    {errors.color && <span>{errors.color}</span>}
                                 </div>
                                 <div className="form-group">
                                     <label>Quantity : </label>
@@ -232,6 +251,8 @@ const ModalAddProduct = (props) => {
                                            value={quantity} onChange={event => setQuantity(event.target.value)}
                                            readOnly={modalState == "detail" ? true : false}
                                            placeholder="Enter Quantity Product"/>
+                                    {errors.quantity && <span>{errors.quantity}</span>}
+
                                 </div>
                                 <div className="form-group">
                                     <label>Sell Price : </label>
@@ -239,6 +260,8 @@ const ModalAddProduct = (props) => {
                                            value={sellPrice} onChange={event => setSellPrice(event.target.value)}
                                            readOnly={modalState == "detail" ? true : false}
                                            placeholder="Enter Sell Price Product"/>
+                                    {errors.sellPrice && <span>{errors.sellPrice}</span>}
+
                                 </div>
                                 <div className="form-group">
                                     <label>Origin Price : </label>
@@ -247,6 +270,8 @@ const ModalAddProduct = (props) => {
                                            value={originPrice} onChange={event => setOriginPrice(event.target.value)}
 
                                            placeholder="Enter Origin Price Product"/>
+                                    {errors.originPrice && <span>{errors.originPrice}</span>}
+
                                 </div>
                                 <div className="form-group ">
                                     <label>Description : </label>
@@ -254,20 +279,26 @@ const ModalAddProduct = (props) => {
                                            readOnly={modalState == "detail" ? true : false}
                                            value={description} onChange={event => setDescription(event.target.value)}
                                            aria-describedby="emailHelp" placeholder="Enter Description"/>
+                                    {errors.description && <span>{errors.description}</span>}
+
                                 </div>
                                 <div className="form-group">
                                     <label>Choose Brand : </label>
                                     <BrandListSelect idBrand={idBrand}  onChangeSelect={handleChangeBrand}/>
+                                    {errors.idBrand && <span>{errors.idBrand}</span>}
                                 </div>
 
                                 <div className="form-group">
                                     <label>Choose SubCategory : </label>
                                     <SubCategorySelect idSubCategory={idSubCategory}
                                                        onchangeSelect={handleChangeSubCategory}/>
+                                    {errors.idSubCategory && <span>{errors.idSubCategory}</span>}
+
                                 </div>
                                 <div className="form-group">
-                                    <label>Choose SubCategory : </label>
+                                    <label>Choose Status : </label>
                                     <StatusSelect idStatus={idStatus} onchangeSelect={handleChangeStatus}/>
+                                    {errors.idStatus && <span>{errors.idStatus}</span>}
                                 </div>
                             </div>
 

@@ -1,8 +1,6 @@
-package com.poly.test.testptpm.rest;
+package com.poly.test.testptpm.controller;
 
 
-import com.poly.test.testptpm.enties.Brand;
-import com.poly.test.testptpm.enties.Category;
 import com.poly.test.testptpm.enties.SubCategory;
 import com.poly.test.testptpm.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/v1/subcategory")
 public class SubCategoryController {
 
-    SubCategoryService subCategoryService;
+    private SubCategoryService subCategoryService;
 
     @Autowired
     public SubCategoryController(SubCategoryService subCategoryService) {

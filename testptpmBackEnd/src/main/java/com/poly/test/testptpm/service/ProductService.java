@@ -1,6 +1,6 @@
 package com.poly.test.testptpm.service;
 
-import com.poly.test.testptpm.dto.ProductDTO;
+import com.poly.test.testptpm.response.ProductResponse;
 import com.poly.test.testptpm.enties.Product;
 import com.poly.test.testptpm.request.ProductFilterRequest;
 
@@ -12,7 +12,7 @@ public interface ProductService {
 
     Product saveProduct(Product product);
 
-    ProductDTO findProductById(long id);
+    ProductResponse findProductById(long id);
 
     boolean existsById(Long id);
 
@@ -23,13 +23,13 @@ public interface ProductService {
 
     void deleteById(Long id);
 
-    List<ProductDTO> searchProducts(String query);
+    List<ProductResponse> searchProducts(String query);
 
-    List<ProductDTO> getProductsByProductNameProductPriceProdcutBrandAndCategory(ProductFilterRequest productFilterRequest);
+    List<ProductResponse> getProductsByProductNameProductPriceProdcutBrandAndCategory(ProductFilterRequest productFilterRequest);
 
 
 
-    List<ProductDTO> getAllProductDTO();
+    List<ProductResponse> getAllProductDTO();
 
     Product getProductById(Long id);
 

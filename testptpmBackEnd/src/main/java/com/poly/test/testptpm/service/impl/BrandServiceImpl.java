@@ -1,6 +1,6 @@
 package com.poly.test.testptpm.service.impl;
 
-import com.poly.test.testptpm.dao.BrandRepository;
+import com.poly.test.testptpm.repository.BrandRepository;
 import com.poly.test.testptpm.enties.Brand;
 import com.poly.test.testptpm.service.BrandsService;
 import org.springframework.stereotype.Service;
@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Service
 public class BrandServiceImpl implements BrandsService {
+
 
     BrandRepository brandRepository;
 

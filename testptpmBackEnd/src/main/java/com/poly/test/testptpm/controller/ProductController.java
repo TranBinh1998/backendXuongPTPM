@@ -1,7 +1,6 @@
-package com.poly.test.testptpm.rest;
+package com.poly.test.testptpm.controller;
 
-import com.poly.test.testptpm.dao.ProductRepository;
-import com.poly.test.testptpm.dto.ProductDTO;
+import com.poly.test.testptpm.response.ProductResponse;
 import com.poly.test.testptpm.enties.Brand;
 import com.poly.test.testptpm.enties.Product;
 import com.poly.test.testptpm.enties.ProductBrand;
@@ -31,12 +30,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -45,16 +42,15 @@ public class ProductController {
 
     private static final int PAGE_NUMBER = 36;
 
+    private ProductService productService;
 
-    ProductService productService;
+    private BrandsService brandsService;
 
-    BrandsService brandsService;
+    private SubCategoryService subCategoryService;
 
-    SubCategoryService subCategoryService;
+    private StatusService statusService;
 
-    StatusService statusService;
-
-    ProductBrandService productBrandService;
+    private ProductBrandService productBrandService;
 
 
     @Autowired
@@ -74,9 +70,9 @@ public class ProductController {
 
 
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProductDTO() {
+    public ResponseEntity<List<ProductResponse>> getAllProductDTO() {
 
-        List<ProductDTO> productDTOList = productService.getAllProductDTO();
+        List<ProductResponse> productDTOList = productService.getAllProductDTO();
 
         return ResponseEntity.ok(productDTOList);
     }
@@ -85,7 +81,7 @@ public class ProductController {
     @GetMapping("{id}")
     public ResponseEntity<?> getProductById(@PathVariable long id) {
 
-        ProductDTO product = productService.findProductById(id);
+        ProductResponse product = productService.findProductById(id);
         if (product != null) {
             return ResponseEntity.ok(product);
         } else {
@@ -93,32 +89,16 @@ public class ProductController {
         }
     }
 
-
     // Tối ưu hàm để dùng chung cho update và save
     @PostMapping("/save-product")
     @Transactional
-    public ResponseEntity<?> saveProduct(@Validated @RequestBody ProductRequest productRequest, BindingResult result) {
-        try {
-            if (result.hasErrors()) {
-                Map<String, String> errors = new HashMap<>();
-                errors.put("status", "error");
-                errors.put("message", "Dữ liệu không hợp lệ");
-                for (FieldError error : result.getFieldErrors()) {
-                    errors.put(error.getField(), error.getDefaultMessage());
-                }
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
-        }
+    public ResponseEntity<?> saveProduct(@Valid @RequestBody ProductRequest productRequest) {
 
         boolean isUpdate = true;
-
 
         Product product = productService.getProductById(productRequest.getId());
 
         if (product == null) {
-//                nếu là add thì new 1 product để gán;
             isUpdate = false;
             product = new Product();
         }
@@ -153,7 +133,7 @@ public class ProductController {
 
         productBrandService.saveProductBrand(productBrand);
 
-        return ResponseEntity.status(isUpdate ? HttpStatus.OK : HttpStatus.CREATED).body(product);
+        return  ResponseEntity.status(isUpdate ? HttpStatus.OK : HttpStatus.CREATED).body(product);
 
     }
 
@@ -173,7 +153,6 @@ public class ProductController {
             }
 
             productBrandService.delAllByIdProduct(product.getId());
-
             productService.deleteProduct(product);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
@@ -183,9 +162,9 @@ public class ProductController {
 
     // Tìm kiếm product
     @GetMapping("/search")
-    public ResponseEntity<List<ProductDTO>> searchProducts(@RequestParam("query") String query) {
+    public ResponseEntity<List<ProductResponse>> searchProducts(@RequestParam("query") String query) {
 
-        List<ProductDTO> list = productService.searchProducts(query);
+        List<ProductResponse> list = productService.searchProducts(query);
         if (list.isEmpty()) {
             ResponseEntity.status(HttpStatus.NOT_FOUND);
         }
@@ -196,7 +175,7 @@ public class ProductController {
     @PostMapping("/filter-product")
     public ResponseEntity<?> filterPrduct(@RequestBody ProductFilterRequest productFilterRequest) {
 
-        List<ProductDTO> productList = productService.getProductsByProductNameProductPriceProdcutBrandAndCategory(productFilterRequest);
+        List<ProductResponse> productList = productService.getProductsByProductNameProductPriceProdcutBrandAndCategory(productFilterRequest);
 
         if (productList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
