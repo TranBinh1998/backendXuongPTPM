@@ -12,7 +12,7 @@ import java.util.Optional;
 public class BrandServiceImpl implements BrandsService {
 
 
-    BrandRepository brandRepository;
+    private BrandRepository brandRepository;
 
     public BrandServiceImpl(BrandRepository brandRepository) {
         this.brandRepository = brandRepository;
@@ -28,9 +28,5 @@ public class BrandServiceImpl implements BrandsService {
         Optional<Brand> brand = brandRepository.findById(id);
         return brand.orElse(null);
     }
-
-
-
-
 
 }

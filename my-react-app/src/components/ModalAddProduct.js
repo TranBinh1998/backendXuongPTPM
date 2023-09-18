@@ -35,6 +35,8 @@ const ModalAddProduct = (props) => {
 
     const [product, setProduct] = useState(null);
 
+    const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+
     const  [showModal, setShowModal] = useState(false);
 
 
@@ -45,6 +47,7 @@ const ModalAddProduct = (props) => {
             setColor(product.color);
             setQuantity(product.quantity);
             setSellPrice(product.sellPrice);
+            setDescription(product.description);
             setOriginPrice(product.originPrice);
             setIdBrand(product.idBrand);
             setIdStatus(product.idStatus);
@@ -58,6 +61,7 @@ const ModalAddProduct = (props) => {
             setQuantity(0);
             setSellPrice(0);
             setOriginPrice(0);
+            setDescription('');
             setIdBrand(0);
             setIdStatus(0);
             setIdSubCategory(0);
@@ -111,6 +115,7 @@ const ModalAddProduct = (props) => {
             setColor(''); setQuantity(0);
             setSellPrice(0); setOriginPrice(0);
             setDescription('')
+
             setIdBrand(0);
             setIdStatus(0);
             setIdSubCategory(0); }
@@ -158,7 +163,7 @@ const ModalAddProduct = (props) => {
             setErrors(validationErrors)
         }
 
-        if (productReq.sellPrice < productReq.originPrice) {
+        if (+productReq.sellPrice < +productReq.originPrice) {
             console.log(productReq.sellPrice);
             console.log(productReq.originPrice);
             validationErrors.sellPrice = "Gía bán không nên nhỏ hơn giá nhập !!! ";

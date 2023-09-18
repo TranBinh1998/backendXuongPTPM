@@ -4,6 +4,7 @@ import {delProduct, getAllProducts, searchProductByQuery} from "../service/Produ
 import ModalAddProduct from "./ModalAddProduct";
 import {toast} from "react-toastify";
 import FilterProduct from "./FilterProduct";
+import ModalConfirm from "./ModalConfirm";
 
 const TableProduct = () => {
     const [products, setProducts] = useState([]);
@@ -20,11 +21,14 @@ const TableProduct = () => {
 
     const [productResultFitlter, setproductResultFitlter ] = useState();
 
+    const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+
+    const [dataDelete, setDataDelete] = useState("");
 
 
     const handleClose = () =>  {
         setIsShowModalAdd(false);
-
+        setIsShowModalDelete(false);
         setModalMode('');
     }
 
@@ -66,8 +70,6 @@ const TableProduct = () => {
 
     }
 
-
-
     const handleSearchProduct = async () => {
         await searchProductByQuery(querySearchProduct).then(
             (res) => {
@@ -83,25 +85,14 @@ const TableProduct = () => {
 
     const handleFilter = (data) => {
         setProducts(data);
-
     }
-
-
-
 
     const  handleDeleteProduct = async (product) => {
-        try {
-            let  res = await delProduct(product.id)
-            if (res.status === 202) {
-                toast.success("Xóa thành công " +product.productName);
-                setBoolean(true);
-            }else {
-                toast.error("Đã có lỗi xảy ra");
-            }
-        }catch (e) {
-            toast.error("Đã có lỗi xảy ra");
-        }
+        setIsShowModalDelete(true);
+        setDataDelete(product);
     }
+
+    const handleChangeBoolean = (value) => { setBoolean(value); };
 
     return (
         <>
@@ -182,6 +173,13 @@ const TableProduct = () => {
                 addProduct={addProduct}
                 productEdit = {productEdit}
                 modalState = {modalMode}
+            />
+
+            <ModalConfirm
+                show={isShowModalDelete}
+                handleClose={handleClose}
+                dataDelete={dataDelete}
+                onChangeBoolean={handleChangeBoolean}
             />
 
 

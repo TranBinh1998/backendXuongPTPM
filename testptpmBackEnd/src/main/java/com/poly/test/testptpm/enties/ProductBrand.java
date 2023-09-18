@@ -26,6 +26,5 @@ public class ProductBrand {
     @JoinColumn(name = "product_id")
     private Product productId;
 
-
     // Có thể thay thế bằng @ManyToManyn ở bảng product.
 }

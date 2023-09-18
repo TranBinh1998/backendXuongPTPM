@@ -26,7 +26,7 @@ public class ProductRequest {
 
         @Size(min = 2,max = 49, message = "Màu sắc phải có độ dài từ 2 đến 50 ký tự")
         @NotBlank(message = "Màu sắc không được để trống")
-        @Pattern(regexp = "^[\\p{L}\\p{N}\\s]*$", message = "Kí tự đặc biệt không hợp lí")
+        @Pattern(regexp = "^[\\p{L}\\p{N}\\s]*$", message = "Kí tự đặc biệt không hợp lệ")
         private String color;
 
         @Positive(message = "Số lượng phải là một số nguyên dương")
